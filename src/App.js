@@ -10,11 +10,25 @@ class App extends React.Component {
     })
   }
 
+  addData = (event) => {
+    event.preventDefault()
+    console.log(event.target.anecdote.value)
+    this.props.store.dispatch({
+      type: 'NEW_ANEC',
+      data: {
+        content: event.target.anecdote.value,
+        id: (100000*Math.random()).toFixed(0),
+        votes: 0
+      }
+    })
+    event.target.anecdote.value = ''
+  }
+
   render() {
     const anecdotes = this.props.store.getState()
 
     anecdotes.sort(function (a, b) {
-      return a.votes - b.votes;
+      return b.votes - a.votes;
     });
     
     return (
@@ -32,9 +46,9 @@ class App extends React.Component {
           </div>
         )}
         <h2>create new</h2>
-        <form>
-          <div><input /></div>
-          <button>create</button> 
+        <form onSubmit={this.addData}>
+          <div><input name="anecdote" /></div>
+          <button type="submit">create</button> 
         </form>
       </div>
     )
