@@ -2,8 +2,21 @@ import React from 'react';
 
 
 class App extends React.Component {
+
+  vote = (id) => () => {
+    this.props.store.dispatch({
+      type: 'VOTE',
+      data: { id }
+    })
+  }
+
   render() {
     const anecdotes = this.props.store.getState()
+
+    anecdotes.sort(function (a, b) {
+      return a.votes - b.votes;
+    });
+    
     return (
       <div>
         <h2>Anecdotes</h2>
@@ -14,7 +27,7 @@ class App extends React.Component {
             </div>
             <div>
               has {anecdote.votes}
-              <button>vote</button>
+              <button onClick={this.vote(anecdote.id)}>vote</button>
             </div>
           </div>
         )}
